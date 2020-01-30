@@ -1,2 +1,2 @@
 # FNN
-Simple Feedforward neural network
+Simple Feedforward neural network with last softmax layer(optional)
