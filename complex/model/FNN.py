@@ -80,7 +80,7 @@ class FNN:
 
     return grad_w, grad_b
 
-  #get neurons activity
+  #get neurons sums
   def __feedforward(self, obj):
     neurons_activity = [obj]
     for layer in range(len(self.__neurons) - 1):
