@@ -26,10 +26,8 @@ class FNN:
                     for neurons in range(1, len(layers))]
 
     # get biases if hyperparam. is true
-    if bias:
-      self.biases = [numpy.random.normal(size=(1, layers[neurons])) for neurons in range(1, len(layers))]
-    else:
-      self.biases = [numpy.ones((1, layers[neurons])) for neurons in range(1, len(layers))]
+    self.__with_biases = bias
+    self.biases = [numpy.random.normal(size=(1, layers[neurons])) for neurons in range(1, len(layers))]
 
     # get batch size(depending to gradient type)
     if gradient_type == 'batch':
@@ -54,40 +52,43 @@ class FNN:
       indexes = numpy.random.permutation(X_shuffled.shape[0)]
       X_shuffled = X_shuffled[indexes]
       y_shuffled = y_shuffled[indexes]
-      batches = [[X_shuffled[ind:ind + self.batch_size], y_shuffled[ind:ind + self.batch_size]]
+      batches = [([X_shuffled[ind:ind + self.batch_size], y_shuffled[ind:ind + self.batch_size])]
                  for ind in range(0, X.shape[0], self.batch_size)]
 
       for batch in batches:
         gradient = self.__getBatchGradient(batch)
-        self.weights -= gradient[0]
-        if not self.biases:
-          self.biases -= gradient[1]
+        self.weights -= gradient[0]###
+        self.biases -= gradient[1]###
 
   #get avg gradient for batch
   def __getBatchGradient(self, batch):
-    for obj in batch:
-    # ....self.__getObjectGradient()
+    #initialize weight and biases matrix(optional)
     grad_w = [numpy.zeros_like(array) for array in self.weights]
-    if not self.biases:
+    if self.__with_biases:
       grad_b = [numpy.zeros_like(array) for array in self.biases]
 
-  #get gradient for train object
-  def __getObjectGradient(self, X, y):
-    neurons_activity = self.__feedforward(obj)
-    softmax_prob = self.__softmax(neurons_activity[-1])
-    y_vector = numpy.zeros((1, self.__neurons[-1]))
-    y_vector[y] = 1
-    dl_da =
-    numpy.dot(self.__loss_function_derivative(y_vector, softmax_prob), self.__softmaxDerivative(softmax_prob))
+    #get gradient for train object
+    for X_obj, y_obj in batch:
+      neurons_activity = self.__feedforward(X_obj)
+      softmax_prob = self.__softmax(neurons_activity[-1])
+      y_vector = numpy.zeros((1, self.__neurons[-1]))
+      y_vector[y_obj] = 1
 
-    # return activity for each neuron for obj(train or test example)
+      #backpropogation, Der. loss/Der. activ.
+      dl_da = numpy.dot(self.__loss_function_derivative(y_vector, softmax_prob), self.__softmaxDerivative(softmax_prob))
+      for
+
+    return grad_w, grad_b
 
   #get neurons activity
   def __feedforward(self, obj):
     neurons_activity = [obj]
     for layer in range(len(self.__neurons) - 1):
-      layer_activity =
-      self.__activate_function(numpy.dot(neurons_activity[layer], self.weights[layer]) + self.weights[layer])
+      if self.__with_biases:
+        layer_activity = self.__activate_function(numpy.dot(neurons_activity[layer], self.weights[layer])
+                                                + self.biases[layer])
+      else:
+        layer_activity = self.__activate_function(numpy.dot(neurons_activity[layer], self.weights[layer]))
       neurons_activity.append(layer_activity)
     return neurons_activity
 
