@@ -1,8 +1,9 @@
 from .activate_functions import *
 from .loss_functions import *
 
-#activate functions
+
+# activate functions
 activates = {'logistic':(activationLogistic, activationLogisticDerivative)}
 
-#loss finctions
+# loss functions
 losses = {'multiclassEntropy':(lossMulticlassEntropy, lossMulticlassEntropyDerivative)}

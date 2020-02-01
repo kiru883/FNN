@@ -54,10 +54,15 @@ class FNN:
             batches = [(X_shuffled[ind:ind + self.batch_size], y_shuffled[ind:ind + self.batch_size])
                        for ind in range(0, X.shape[0], self.batch_size)]
 
-        for batch in batches:
-            gradient = self.__get_batch_gradient(batch)
-            self.weights -= gradient[0]###
-            self.biases -= gradient[1]###
+            for batch in batches:
+                gradient = self.__get_batch_gradient(batch)
+
+                # update weights and biases
+                self.weights = [self.weights[layer] - self.__alpha * gradient[0][layer]
+                                for layer in range(self.__neurons)]
+                if self.__with_biases:
+                    self.biases = [self.biases[layer] - self.__alpha * gradient[1][layer]
+                                   for layer in range(self.__neurons)]
 
     # get avg gradient for batch
     def __get_batch_gradient(self, batch):
@@ -68,8 +73,8 @@ class FNN:
 
         # get gradient for train object
         for X_obj, y_obj in batch:
-            neurons_sums = self.__feedforward(X_obj)
-            softmax_prob = self.__softmax(self.__activate_function(neurons_sums[-1]))
+            neurons_signals = self.__feedforward(X_obj)
+            softmax_prob = self.__softmax(neurons_signals[-1][1])
             y_vector = numpy.zeros((1, self.__neurons[-1]))
             y_vector[y_obj] = 1
 
@@ -78,31 +83,34 @@ class FNN:
                               self.__softmax_derivative(softmax_prob))
             for layer in range(1, len(self.__neurons)):
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
-                dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_sums[-layer]))#softmax???
+                dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
-                self.weights[-layer]
+                grad_w[-layer] += numpy.dot(numpy.transpose(self.weights[-layer][1]), dl_ds)
+                dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds))
 
-
-
-
+        # get avg. gradient
+        grad_w = list(map(lambda x: x/self.batch_size, grad_w))
+        if self.__with_biases:
+            grad_b = list(map(lambda x: x/self.batch_size, grad_b))
 
         return grad_w, grad_b
 
-    # get neurons sums, obj is horizontal feature-vector
+    # get neurons sums and activations for each layer, obj is horizontal feature-vector
     def __feedforward(self, obj):
         activations = obj
-        neurons_sums = []
+        neurons_signals = []
 
         for layer in range(len(self.__neurons) - 1):
             if self.__with_biases:
-                neurons_sums.append(numpy.dot(activations, self.weights[layer]) + self.biases)
+                sums = numpy.dot(activations, self.weights[layer]) + self.biases
             else:
-                neurons_sums.append(numpy.dot(activations, self.weights[layer]))
-            activations = self.__activate_function(neurons_sums[-1])
+                sums = numpy.dot(activations, self.weights[layer])
+            activations = self.__activate_function(sums)
+            neurons_signals.append((sums, activations))
 
-        return neurons_sums
+        return neurons_signals
 
     # softMax for last layer
     def __softmax(self, arg):
