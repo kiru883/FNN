@@ -92,9 +92,10 @@ class FNN:
                 print("weights: ", self.weights[-layer])
                 print("activ: ", neurons_signals[-layer][1])
                 print("dlds: ", dl_ds)
+                print("layer: ", layer)
 
 
-                grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer][1]), dl_ds)
+                grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer-1][1]), dl_ds)
                 dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds))
 
         # get avg. gradient
