@@ -1,1 +1,1 @@
-from complex.model import FNN
+from utils.model.FNN import FNN
