@@ -1,5 +1,5 @@
 import numpy
-from complex.functions.init import activates, losses
+from complex.functions.functions_initialization import activates, losses
 
 
 class FNN:
