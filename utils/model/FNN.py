@@ -30,7 +30,7 @@ class FNN:
         self.__with_biases = bias
         self.biases = [numpy.random.randn(1, layers[neurons]) for neurons in range(1, len(layers))]
 
-    # get batch size(depending to gradient type)
+    # get batch size(depending to gradient type)#
         if gradient_type == 'batch':
             self.gradient_type = gradient_type
         elif gradient_type == 'stochastic':
@@ -106,11 +106,11 @@ class FNN:
             for layer in range(1, len(self.__neurons)):
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
-                print("dl_da: ", dl_da)
-                print("dl_ds: ", dl_ds)
-                print("activate der: ", self.__activate_function_derivative(neurons_signals[-layer][0]))
-                print("neuro sum: ", neurons_signals[-layer][0])
-                print("neuro act: ", neurons_signals[-layer][1])
+                #print("dl_da: ", dl_da)
+                #print("dl_ds: ", dl_ds)
+                #print("activate der: ", self.__activate_function_derivative(neurons_signals[-layer][0]))
+                #print("neuro sum: ", neurons_signals[-layer][0])
+                #print("neuro act: ", neurons_signals[-layer][1])
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
