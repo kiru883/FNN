@@ -21,12 +21,12 @@ class FNN:
         self.__neurons = layers
 
     # get weights
-        self.weights = [numpy.random.normal(size=(layers[neurons - 1], layers[neurons]))
+        self.weights = [numpy.random.random_sample(size=(layers[neurons - 1], layers[neurons]))
                         for neurons in range(1, len(layers))]
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
-        self.biases = [numpy.random.normal(size=(1, layers[neurons])) for neurons in range(1, len(layers))]
+        self.biases = [numpy.random.random_sample(size=(1, layers[neurons])) for neurons in range(1, len(layers))]
 
     # get batch size(depending to gradient type)
         if gradient_type == 'batch':
@@ -84,20 +84,11 @@ class FNN:
             dl_da = numpy.dot(self.__loss_function_derivative(y_vector, softmax_prob),
                               self.__softmax_derivative(softmax_prob))
             for layer in range(1, len(self.__neurons)):
-                print("layer: ", layer)
-                print("neulen: ", len(neurons_signals[-layer-1]))
-                print("dlda: ", dl_da)
-                print("sums: ", neurons_signals[-layer][0])
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
-                print("dlds: ", dl_ds)
+
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
-
-                print("asd", neurons_signals[-layer-1][1])
-
-
-
 
                 grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer-1][1]), dl_ds)
                 dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds)).transpose()
