@@ -112,7 +112,7 @@ class FNN:
     # get neurons sums and activations for each layer, obj is horizontal feature-vector
     def __feedforward(self, obj):
         activations = obj
-        neurons_signals = []
+        neurons_signals = [(None, activations)]     # sum and activations on first layer
 
         for layer in range(len(self.__neurons) - 1):
             if self.__with_biases:
