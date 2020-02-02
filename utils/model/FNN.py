@@ -93,8 +93,7 @@ class FNN:
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
-                print("weights: ", self.weights[-layer])
-                print("activ: ", neurons_signals[-layer][1])
+                print("asd", len(grad_w))
 
 
 
