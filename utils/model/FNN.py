@@ -84,15 +84,17 @@ class FNN:
             dl_da = numpy.dot(self.__loss_function_derivative(y_vector, softmax_prob),
                               self.__softmax_derivative(softmax_prob))
             for layer in range(1, len(self.__neurons)):
+                print("layer: ", layer)
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
+                print("dlds: ", dl_ds)
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
                 print("weights: ", self.weights[-layer])
                 print("activ: ", neurons_signals[-layer][1])
-                print("dlds: ", dl_ds)
-                print("layer: ", layer)
+
+
 
 
                 grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer-1][1]), dl_ds)
