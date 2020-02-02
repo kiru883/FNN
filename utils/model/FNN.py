@@ -100,7 +100,7 @@ class FNN:
 
 
                 grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer-1][1]), dl_ds)
-                dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds))
+                dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds)).transpose()
 
         # get avg. gradient
         grad_w = list(map(lambda x: x/self.batch_size, grad_w))
