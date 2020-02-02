@@ -108,6 +108,7 @@ class FNN:
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
                 print("dl_da: ", dl_da)
                 print("dl_ds: ", dl_ds)
+                print("activate der: ", self.__activate_function_derivative(neurons_signals[-layer][0]))
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
