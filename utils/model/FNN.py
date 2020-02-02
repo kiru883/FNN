@@ -89,7 +89,7 @@ class FNN:
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
-                grad_w[-layer] += numpy.dot(numpy.transpose(self.weights[-layer][1]), dl_ds)
+                grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer][1]), dl_ds)
                 dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds))
 
         # get avg. gradient
