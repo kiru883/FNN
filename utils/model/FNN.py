@@ -28,7 +28,7 @@ class FNN:
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
-        self.biases = [numpy.random.random_sample(1, layers[neurons]) for neurons in range(1, len(layers))]
+        self.biases = [numpy.random.randn(1, layers[neurons]) for neurons in range(1, len(layers))]
 
     # get batch size(depending to gradient type)
         if gradient_type == 'batch':
