@@ -1,2 +1,2 @@
-# FNNS
-Simple Feedforward neural network with last softmax layer for **classifications**
+# FNN
+Simple Feedforward neural network for with last softmax layer for **classifications**
