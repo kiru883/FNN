@@ -45,7 +45,7 @@ class FNN:
     # train model, X and y is horizontal vector(size is (1,))
     def fit(self, X, y):
         if self.__verbosity:
-            print("Training started, ", time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime()))
+            print("Training started, ", time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
 
         if self.gradient_type == 'batch':
             self.batch_size = X.shape[0]
@@ -69,10 +69,10 @@ class FNN:
 
                 # update weights and biases
                 self.weights = [self.weights[layer] - self.__alpha * gradient[0][layer]
-                                for layer in range(len(self.__neurons))]
+                                for layer in range(len(self.__neurons)-1)]
                 if self.__with_biases:
                     self.biases = [self.biases[layer] - self.__alpha * gradient[1][layer]
-                                   for layer in range(len(self.__neurons))]
+                                   for layer in range(len(self.__neurons)-1)]
 
             if self.__verbosity:
                 print(f"Epoch {epoch} is ended, time has passed: {time_start - time.time()}")
