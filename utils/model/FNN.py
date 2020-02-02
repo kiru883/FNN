@@ -75,7 +75,7 @@ class FNN:
                                    for layer in range(len(self.__neurons)-1)]
 
             if self.__verbosity:
-                print(f"Epoch {epoch} is ended, time has passed: {time_start - time.time()}")
+                print(f"Epoch {epoch} is ended, time has passed: {time.time() - time_start}")
 
     def predict_proba(self, X):
         predicts = []
@@ -85,8 +85,6 @@ class FNN:
             predicts.append(softmax_prob)
 
         return predicts
-
-
 
     # get avg gradient for batch
     def __get_batch_gradient(self, batch):
@@ -108,7 +106,8 @@ class FNN:
             for layer in range(1, len(self.__neurons)):
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
-
+                print("dl_da: ", dl_da)
+                print("dl_ds: ", dl_ds)
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
