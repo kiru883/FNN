@@ -85,6 +85,8 @@ class FNN:
                               self.__softmax_derivative(softmax_prob))
             for layer in range(1, len(self.__neurons)):
                 print("layer: ", layer)
+                print("dlda: ", dl_da)
+                print("sums: ", neurons_signals[-layer][0])
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
                 print("dlds: ", dl_ds)
