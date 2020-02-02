@@ -106,7 +106,7 @@ class FNN:
 
         for layer in range(len(self.__neurons) - 1):
             if self.__with_biases:
-                sums = numpy.dot(activations, self.weights[layer]) + self.biases
+                sums = numpy.dot(activations, self.weights[layer]) + self.biases[layer]
             else:
                 sums = numpy.dot(activations, self.weights[layer])
             activations = self.__activate_function(sums)
