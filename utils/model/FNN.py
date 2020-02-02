@@ -1,4 +1,5 @@
 import numpy
+import time
 from FNNS.utils.functions.functions_initialization import activates, losses
 
 
@@ -6,8 +7,9 @@ class FNN:
 
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
                  loss_type='multiclassEntropy', gradient_type='batch',
-                 batch_size=None, bias=True):
+                 batch_size=None, bias=True, verbosity=True):
 
+        self.__verbosity = verbosity
         self.__alpha = alpha
         self.__epochs = epochs
 
@@ -46,6 +48,9 @@ class FNN:
             self.batch_size = X.shape[0]
 
         for epoch in range(self.__epochs):
+            # need for time of each epoch
+            time_start = time.time()
+
             indexes = numpy.random.permutation(X.shape[0])
             X_shuffled = X[indexes]
             y_shuffled = y[indexes]
@@ -65,6 +70,20 @@ class FNN:
                 if self.__with_biases:
                     self.biases = [self.biases[layer] - self.__alpha * gradient[1][layer]
                                    for layer in range(self.__neurons)]
+
+            if self.__verbosity:
+                print(f"Epoch {epoch} is ended, time has passed: {time_start - time.time()}")
+
+    def predict_proba(self, X):
+        predicts = []
+        for obj in X:
+            neurons_signals = self.__feedforward(obj.reshape(1, -1))
+            softmax_prob = self.__softmax(neurons_signals[-1][1])
+            predicts.append(softmax_prob)
+
+        return predicts
+
+
 
     # get avg gradient for batch
     def __get_batch_gradient(self, batch):
