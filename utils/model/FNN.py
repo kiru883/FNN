@@ -1,5 +1,5 @@
 import numpy
-from utils.functions.functions_initialization import activates, losses
+from FNNS.utils.functions.functions_initialization import activates, losses
 
 
 class FNN:
