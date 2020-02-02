@@ -23,12 +23,12 @@ class FNN:
         self.__neurons = layers
 
     # get weights
-        self.weights = [numpy.random.random_sample(size=(layers[neurons - 1], layers[neurons]))
+        self.weights = [numpy.random.randn(layers[neurons - 1], layers[neurons])
                         for neurons in range(1, len(layers))]
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
-        self.biases = [numpy.random.random_sample(size=(1, layers[neurons])) for neurons in range(1, len(layers))]
+        self.biases = [numpy.random.random_sample(1, layers[neurons]) for neurons in range(1, len(layers))]
 
     # get batch size(depending to gradient type)
         if gradient_type == 'batch':
