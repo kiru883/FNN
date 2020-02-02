@@ -15,7 +15,7 @@ class FNN:
         self.__activate_function_derivative = activates[activate_type][1]
 
     # setup loss function
-        self.__loss_function_derivative = losses[loss_type]
+        self.__loss_function_derivative = losses[loss_type][1]
 
     # neurons on each layer
         self.__neurons = layers
@@ -78,7 +78,6 @@ class FNN:
             neurons_signals = self.__feedforward(X_obj)
             softmax_prob = self.__softmax(neurons_signals[-1][1])
             y_vector = numpy.zeros((1, self.__neurons[-1]))
-            print("vector:", y_vector, "y: ", y_obj)
             y_vector[:, y_obj] = 1
 
             # backpropogation, Der. loss/Der. activ.
