@@ -40,19 +40,21 @@ class FNN:
         else:
             raise Exception("Bad 'gradient_type'")
 
-    # train model
+    # train model, X and y is horizontal vector(size is (1,))
     def fit(self, X, y):
         if self.gradient_type == 'batch':
             self.batch_size = X.shape[0]
 
         for epoch in range(self.__epochs):
-            X_shuffled = numpy.array(X)
-            y_shuffled = numpy.array(y)
-            indexes = numpy.random.permutation(X_shuffled.shape[0])
-            X_shuffled = X_shuffled[indexes]
-            y_shuffled = y_shuffled[indexes]
-            batches = [(X_shuffled[ind:ind + self.batch_size], y_shuffled[ind:ind + self.batch_size])
-                       for ind in range(0, X.shape[0], self.batch_size)]
+            indexes = numpy.random.permutation(X.shape[0])
+            X_shuffled = X[indexes]
+            y_shuffled = y[indexes]
+
+            batches = []
+            for ind in range(0, X.shape[0], self.batch_size):
+                batches.append(list(map(lambda x: (x[0].reshape(1, -1), x[1]),
+                                        zip(X_shuffled[ind:ind + self.batch_size],
+                               y_shuffled[ind:ind + self.batch_size]))))
 
             for batch in batches:
                 gradient = self.__get_batch_gradient(batch)
