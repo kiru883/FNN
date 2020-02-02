@@ -89,6 +89,11 @@ class FNN:
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
+                print("weights: ", self.weights[-layer])
+                print("activ: ", neurons_signals[-layer][1])
+                print("dlds: ", dl_ds)
+
+
                 grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer][1]), dl_ds)
                 dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds))
 
