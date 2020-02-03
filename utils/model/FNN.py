@@ -106,20 +106,20 @@ class FNN:
             for layer in range(1, len(self.__neurons)):
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
-                print("dl_da: ", dl_da)
-                print("dl_ds: ", dl_ds)
-                print("activate der: ", self.__activate_function_derivative(neurons_signals[-layer][0]))
-                print("neuro sum: ", neurons_signals[-layer][0])
-                print("neuro act: ", neurons_signals[-layer][1])
-                if self.__with_biases:
+                #print("dl_da: ", dl_da)
+                #print("dl_ds: ", dl_ds)
+                #print("activate der: ", self.__activate_function_derivative(neurons_signals[-layer][0]))
+                #print("neuro sum: ", neurons_signals[-layer][0])
+                #print("neuro act: ", neurons_signals[-layer][1])
+                if self.__with_biases:#
                     grad_b[-layer] += dl_ds
 
                 grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer-1][1]), dl_ds)
                 dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds)).transpose()
 
         # get avg. gradient
-        print("gradw:", grad_w)
-        print("gradb:", grad_b)
+        #print("gradw:", grad_w)
+        #print("gradb:", grad_b)
         grad_w = list(map(lambda x: x/self.batch_size, grad_w))
         if self.__with_biases:
             grad_b = list(map(lambda x: x/self.batch_size, grad_b))
