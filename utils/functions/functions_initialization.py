@@ -6,4 +6,5 @@ from .loss_functions import *
 activates = {'logistic':(activationLogistic, activationLogisticDerivative)}
 
 # loss functions
-losses = {'multiclassEntropy':(lossMulticlassEntropy, lossMulticlassEntropyDerivative)}
+losses = {'multiclassEntropy': lossMulticlassEntropyDerivative,
+          'MSE': MSEDerivative}

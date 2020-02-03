@@ -8,3 +8,8 @@ def lossMulticlassEntropy(y, y_):
 
 def lossMulticlassEntropyDerivative(y, y_):
     return -y / y_
+
+
+# MSE
+def MSEDerivative(y, y_):
+    return y_ - y

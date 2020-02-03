@@ -4,8 +4,8 @@ import numpy
 
 # logistic function
 def activationLogistic(arg):
-    return 1 / (1 + numpy.exp(-arg))
+    return 1.0 / (1.0 + numpy.exp(-arg))
 
 def activationLogisticDerivative(arg):
-    return numpy.exp(-arg) / ((numpy.exp(-arg) + 1) ** 2)
+    return numpy.exp(-arg) / ((numpy.exp(-arg) + 1.0) ** 2.0)
 

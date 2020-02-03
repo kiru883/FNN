@@ -1,6 +1,6 @@
 import numpy
 import time
-from FNNS.utils.functions.functions_initialization import activates, losses
+from utils.functions.functions_initialization import activates, losses
 
 
 class FNN:
@@ -17,18 +17,18 @@ class FNN:
         self.__activate_function_derivative = activates[activate_type][1]
 
     # setup loss function
-        self.__loss_function_derivative = losses[loss_type][1]
+        self.__loss_function_derivative = losses[loss_type]
 
     # neurons on each layer
         self.__neurons = layers
 
     # get weights
-        self.weights = [numpy.random.uniform(-1, 1, (layers[neurons - 1], layers[neurons]))
+        self.weights = [numpy.random.normal(0, 1, (layers[neurons - 1], layers[neurons]))
                         for neurons in range(1, len(layers))]
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
-        self.biases = [numpy.random.uniform(-1, 1, (1, layers[neurons])) for neurons in range(1, len(layers))]
+        self.biases = [numpy.random.normal(0, 1, (1, layers[neurons])) for neurons in range(1, len(layers))]
 
     # get batch size(depending to gradient type)#
         if gradient_type == 'batch':
@@ -75,7 +75,7 @@ class FNN:
                                    for layer in range(len(self.__neurons)-1)]
 
             if self.__verbosity:
-                print(f"Epoch {epoch+1} is ended, time has passed: {time.time() - time_start}")
+                print(f"Epoch {epoch+1} is ended, time has passed: {round(time.time() - time_start, 2)} sec.")
 
     def predict_proba(self, X):
         predicts = []
@@ -101,25 +101,21 @@ class FNN:
             y_vector[:, y_obj] = 1
 
             # backpropogation, Der. loss/Der. activ.
+            #dl_da = self.__loss_function_derivative(y_vector, neurons_signals[-1][1])
             dl_da = numpy.dot(self.__loss_function_derivative(y_vector, softmax_prob),
                               self.__softmax_derivative(softmax_prob))
+
             for layer in range(1, len(self.__neurons)):
                 # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
                 dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
-                #print("dl_da: ", dl_da)
-                #print("dl_ds: ", dl_ds)
-                #print("activate der: ", self.__activate_function_derivative(neurons_signals[-layer][0]))
-                #print("neuro sum: ", neurons_signals[-layer][0])
-                #print("neuro act: ", neurons_signals[-layer][1])
-                if self.__with_biases:#
+
+                if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
                 grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer-1][1]), dl_ds)
                 dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds)).transpose()
 
         # get avg. gradient
-        #print("gradw:", grad_w)
-        #print("gradb:", grad_b)
         grad_w = list(map(lambda x: x/self.batch_size, grad_w))
         if self.__with_biases:
             grad_b = list(map(lambda x: x/self.batch_size, grad_b))
