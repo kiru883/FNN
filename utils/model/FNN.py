@@ -21,14 +21,13 @@ class FNN:
 
     # neurons on each layer
         self.__neurons = layers
-
+#
     # get weights
-        self.weights = [numpy.random.normal(0, 1, (layers[neurons - 1], layers[neurons]))
-                        for neurons in range(1, len(layers))]
+        self.variance_scaling(layers)
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
-        self.biases = [numpy.random.normal(0, 1, (1, layers[neurons])) for neurons in range(1, len(layers))]
+        self.biases = [numpy.zeros((1, layers[neurons])) for neurons in range(1, len(layers))]
 
     # get batch size(depending to gradient type)#
         if gradient_type == 'batch':
@@ -81,8 +80,8 @@ class FNN:
         predicts = []
         for obj in X:
             neurons_signals = self.__feedforward(obj.reshape(1, -1))
-            softmax_prob = self.__softmax(neurons_signals[-1][1])
-            predicts.append(softmax_prob)
+            #softmax_prob = self.__softmax(neurons_signals[-1][1])
+            predicts.append(neurons_signals[-1][1])
 
         return predicts
 
@@ -96,24 +95,22 @@ class FNN:
         # get gradient for train object
         for X_obj, y_obj in batch:
             neurons_signals = self.__feedforward(X_obj)
-            softmax_prob = self.__softmax(neurons_signals[-1][1])
+            #softmax_prob = self.__softmax(neurons_signals[-1][1])
             y_vector = numpy.zeros((1, self.__neurons[-1]))
             y_vector[:, y_obj] = 1
 
             # backpropogation, Der. loss/Der. activ.
-            #dl_da = self.__loss_function_derivative(y_vector, neurons_signals[-1][1])
-            dl_da = numpy.dot(self.__loss_function_derivative(y_vector, softmax_prob),
-                              self.__softmax_derivative(softmax_prob))
-
+            dl_ds = numpy.dot(self.__loss_function_derivative(y_vector, neurons_signals[-1][1]),
+                              self.__softmax_derivative(neurons_signals[-1][1]))
             for layer in range(1, len(self.__neurons)):
-                # dl_da*da_ds(element-wise multiple) = dl_ds, also bias gradient
-                dl_ds = numpy.multiply(dl_da, self.__activate_function_derivative(neurons_signals[-layer][0]))
+                if layer != 1:
+                    dl_ds = dl_da * self.__activate_function_derivative(neurons_signals[-layer][0])
 
                 if self.__with_biases:
                     grad_b[-layer] += dl_ds
 
                 grad_w[-layer] += numpy.dot(numpy.transpose(neurons_signals[-layer-1][1]), dl_ds)
-                dl_da = numpy.dot(self.weights[-layer], numpy.transpose(dl_ds)).transpose()
+                dl_da = numpy.transpose(numpy.dot(self.weights[-layer], numpy.transpose(dl_ds)))
 
         # get avg. gradient
         grad_w = list(map(lambda x: x/self.batch_size, grad_w))
@@ -127,13 +124,20 @@ class FNN:
         activations = obj
         neurons_signals = [(None, activations)]     # sum and activations on first layer
 
-        for layer in range(len(self.__neurons) - 1):
+        for layer in range(len(self.__neurons) - 2):
             if self.__with_biases:
                 sums = numpy.dot(activations, self.weights[layer]) + self.biases[layer]
             else:
                 sums = numpy.dot(activations, self.weights[layer])
             activations = self.__activate_function(sums)
             neurons_signals.append((sums, activations))
+
+        if self.__with_biases:
+            sums = numpy.dot(activations, self.weights[-1]) + self.biases[-1]
+        else:
+            sums = numpy.dot(activations, self.weights[-1])
+        activations = self.__softmax(sums)
+        neurons_signals.append((sums, activations))
 
         return neurons_signals
 
@@ -145,4 +149,11 @@ class FNN:
     # softmax derivative
     def __softmax_derivative(self, arg):
         # thank you, @mattpetersen!
-        return numpy.diag(arg) - numpy.outer(arg, arg)
+        return numpy.diag(arg[0]) - numpy.outer(arg, arg)
+
+    # need for weights initialization
+    def variance_scaling(self, layers):
+        self.weights = []
+        for neurons in range(1, len(layers)):
+            fan_avg = (6 / (layers[neurons - 1] + layers[neurons])) ** (0.5)
+            self.weights.append(numpy.random.uniform(-fan_avg, fan_avg, (layers[neurons - 1], layers[neurons])))

@@ -3,7 +3,8 @@ from .loss_functions import *
 
 
 # activate functions
-activates = {'logistic':(activationLogistic, activationLogisticDerivative)}
+activates = {'logistic':(logistic, logisticDerivative),
+             'relu':(relu, reluDerivative)}
 
 # loss functions
 losses = {'multiclassEntropy': lossMulticlassEntropyDerivative,
