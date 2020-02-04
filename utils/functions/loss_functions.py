@@ -3,9 +3,21 @@ import numpy
 
 
 # multiclass entropy
-def lossMulticlassEntropyDerivative(y, y_):
+def multiclassEntropyDerivative(y, y_):
     return -y / y_
 
-# MSE
-def MSEDerivative(y, y_):
+# mse
+def mseDerivative(y, y_):
     return y_ - y
+
+# helinger
+def helingerDerivative(y, y_):
+    return (numpy.sqrt(y_) - numpy.sqrt(y)) / numpy.sqrt(2*y_)
+
+# kullback
+def kullbackDerivative(y, y_):
+    return (y_ - y) / y_
+
+# itakura
+def itakuraDerivative(y, y_):
+    return (y_ - y) / (y_**2)
