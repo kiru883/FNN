@@ -10,11 +10,12 @@ activates = {'logistic': (logistic, logisticDerivative),
              'elu': (elu, eluDerivative),
              'softplus': (softplus, softplusDerivative),
              'lrelu': (lrelu, lreluDerivative),
-             'swish': (swish, swishDerivative)}
+             'swish': (swish, swishDerivative)
+             }
 
 # loss functions
 losses = {'multiclassEntropy': multiclassEntropyDerivative,
-          'MSE': mseDerivative,
+          'mse': mseDerivative,
           'helinger': helingerDerivative,
-          'kullback': kullbackDerivative,
-          'itakura': itakuraDerivative}
+          'kullback': kullbackDerivative
+          }

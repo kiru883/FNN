@@ -18,6 +18,3 @@ def helingerDerivative(y, y_):
 def kullbackDerivative(y, y_):
     return (y_ - y) / y_
 
-# itakura
-def itakuraDerivative(y, y_):
-    return (y_ - y) / (y_**2)

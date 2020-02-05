@@ -6,13 +6,15 @@ from utils.functions.functions_initialization import activates, losses
 class FNN:
 
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
-                 loss_type='multiclassEntropy', gradient_type='batch',
-                 batch_size=None, bias=True, verbosity=True):
+                 loss_type='multiclassEntropy', batch_size=None, softmax_output=True,
+                 bias=True, verbosity=True):
 
+        self.__with_softmax_output = softmax_output
         self.__verbosity = verbosity
         self.__alpha = alpha
         self.__epochs = epochs
 
+    # set activations(functions and derivative)
         self.__activate_function = activates[activate_type][0]
         self.__activate_function_derivative = activates[activate_type][1]
 
@@ -21,32 +23,24 @@ class FNN:
 
     # neurons on each layer
         self.__neurons = layers
-#
+
     # get weights
-        self.variance_scaling(layers)
+        self.__variance_scaling(layers)
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
         self.biases = [numpy.zeros((1, layers[neurons])) for neurons in range(1, len(layers))]
 
-    # get batch size(depending to gradient type)#
-        if gradient_type == 'batch':
-            self.gradient_type = gradient_type
-        elif gradient_type == 'stochastic':
-            self.gradient_type = gradient_type
-            self.batch_size = 1
-        elif gradient_type == 'minibatch':
-            self.gradient_type = gradient_type
-            self.batch_size = batch_size
-        else:
-            raise Exception("Bad 'gradient_type'")
+    # get batch size
+        self.batch_size = batch_size
+
 
     # train model, X and y is horizontal vector(size is (1,))
     def fit(self, X, y):
         if self.__verbosity:
             print("Training started, ", time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
 
-        if self.gradient_type == 'batch':
+        if self.batch_size == 'batch':
             self.batch_size = X.shape[0]
 
         for epoch in range(self.__epochs):
@@ -76,32 +70,36 @@ class FNN:
             if self.__verbosity:
                 print(f"Epoch {epoch+1} is ended, time has passed: {round(time.time() - time_start, 2)} sec.")
 
+    # return predict probabilities for X's
     def predict_proba(self, X):
         predicts = []
         for obj in X:
             neurons_signals = self.__feedforward(obj.reshape(1, -1))
-            #softmax_prob = self.__softmax(neurons_signals[-1][1])
             predicts.append(neurons_signals[-1][1])
 
         return predicts
 
     # get avg gradient for batch
     def __get_batch_gradient(self, batch):
-        # initialize weight and biases matrix(optional)
+        # initialize weight and biases matrix
         grad_w = [numpy.zeros_like(array) for array in self.weights]
-        if self.__with_biases:
-            grad_b = [numpy.zeros_like(array) for array in self.biases]
+        grad_b = [numpy.zeros_like(array) for array in self.biases]
 
         # get gradient for train object
         for X_obj, y_obj in batch:
             neurons_signals = self.__feedforward(X_obj)
-            #softmax_prob = self.__softmax(neurons_signals[-1][1])
             y_vector = numpy.zeros((1, self.__neurons[-1]))
             y_vector[:, y_obj] = 1
 
-            # backpropogation, Der. loss/Der. activ.
-            dl_ds = numpy.dot(self.__loss_function_derivative(y_vector, neurons_signals[-1][1]),
-                              self.__softmax_derivative(neurons_signals[-1][1]))
+            # backpropogation, error on last layer(depending on hyperparam.).
+            if self.__with_softmax_output:
+                dl_ds = numpy.dot(self.__loss_function_derivative(y_vector, neurons_signals[-1][1]),
+                                  self.__softmax_derivative(neurons_signals[-1][1]))
+            else:
+                dl_ds = numpy.multiply(self.__loss_function_derivative(y_vector, neurons_signals[-1][1]),
+                                       self.__activate_function_derivative(neurons_signals[-1][1]))
+
+            # backpropogation
             for layer in range(1, len(self.__neurons)):
                 if layer != 1:
                     dl_ds = dl_da * self.__activate_function_derivative(neurons_signals[-layer][0])
@@ -125,18 +123,22 @@ class FNN:
         neurons_signals = [(None, activations)]     # sum and activations on first layer
 
         for layer in range(len(self.__neurons) - 2):
+            sums = numpy.dot(activations, self.weights[layer])
             if self.__with_biases:
-                sums = numpy.dot(activations, self.weights[layer]) + self.biases[layer]
-            else:
-                sums = numpy.dot(activations, self.weights[layer])
+                sums += self.biases[layer]
+
             activations = self.__activate_function(sums)
             neurons_signals.append((sums, activations))
 
+        sums = numpy.dot(activations, self.weights[-1])
         if self.__with_biases:
-            sums = numpy.dot(activations, self.weights[-1]) + self.biases[-1]
+            sums += self.biases[-1]
+
+        #get activations on last layer(depending on hyperparam.)
+        if self.__with_softmax_output:
+            activations = self.__softmax(sums)
         else:
-            sums = numpy.dot(activations, self.weights[-1])
-        activations = self.__softmax(sums)
+            activations = self.__activate_function(sums)
         neurons_signals.append((sums, activations))
 
         return neurons_signals
@@ -152,7 +154,7 @@ class FNN:
         return numpy.diag(arg[0]) - numpy.outer(arg, arg)
 
     # need for weights initialization
-    def variance_scaling(self, layers):
+    def __variance_scaling(self, layers):
         self.weights = []
         for neurons in range(1, len(layers)):
             fan_avg = (6 / (layers[neurons - 1] + layers[neurons])) ** (0.5)
