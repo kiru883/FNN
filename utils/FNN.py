@@ -52,10 +52,11 @@ class FNN:
         self.__loss_function_derivative = losses[loss_type]
 
     # neurons on each layer
-        self.__neurons = layers
+        # need for hyperopt supporting, zeros in layer allow creating hyperparam. space more easiest
+        self.__neurons = [layer for layer in layers if layer != 0]
 
     # get weights
-        self.__variance_scaling(layers)
+        self.__variance_scaling()
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
@@ -202,8 +203,9 @@ class FNN:
         return numpy.diag(arg[0]) - numpy.outer(arg, arg)
 
     # need for weights initialization
-    def __variance_scaling(self, layers):
+    def __variance_scaling(self):
         self.weights = []
-        for neurons in range(1, len(layers)):
-            fan_avg = (6 / (layers[neurons - 1] + layers[neurons])) ** (0.5)
-            self.weights.append(numpy.random.uniform(-fan_avg, fan_avg, (layers[neurons - 1], layers[neurons])))
+        for neurons in range(1, len(self.__neurons)):
+            fan_avg = (6 / (self.__neurons[neurons - 1] + self.__neurons[neurons])) ** (0.5)
+            self.weights.append(numpy.random.uniform(-fan_avg, fan_avg, (self.__neurons[neurons - 1],
+                                                                         self.__neurons[neurons])))
