@@ -36,7 +36,7 @@ class FNN:
     """
 
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
-                 loss_type='multiclassEntropy', batch_size=None, softmax_output=True,
+                 loss_type='multiclassEntropy', batch_size='batch', softmax_output=True,
                  bias=True, verbosity=True):
         self.__with_softmax_output = softmax_output
         self.__verbosity = verbosity
