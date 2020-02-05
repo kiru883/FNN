@@ -33,7 +33,6 @@ class FNN:
 
             verbosity: bool,
                 Write train time and time each epoch
-
     """
 
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
@@ -68,10 +67,12 @@ class FNN:
     def fit(self, X, y):
         """
         Train the model.
-        :type X: numpy.array
-        :param X: Horizontal vector with train objects, have (-1,) shape
-        :type y: numpy.array
-        :param y: Horizontal vector with train labels, have (-1,) shape
+
+        X: numpy.array,
+            Horizontal vector with train objects, have (-1,) shape
+
+        y: numpy.array,
+            Horizontal vector with train labels, have (-1,) shape
         """
 
         if self.__verbosity:
@@ -111,9 +112,11 @@ class FNN:
     def predict_proba(self, X):
         """
         Return list of probabilities for each class of train object(s).
-        :type X: numpy.array
-        :param X: Horizontal vector with train objects, have (-1,) shape
-        :return: list of size len(X)
+
+        X: numpy.array,
+            Horizontal vector with train objects, have (-1,) shape
+
+        RETURN: list of size len(X)
         """
 
         predicts = []
