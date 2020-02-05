@@ -4,34 +4,33 @@ from utils.functions.functions_initialization import activates, losses
 
 
 class FNN:
+    """
+            Create model.
+            :type layers: list
+            :param layers: List with neurons on each layer, last number should be numbers of classes
+            :type alpha: float
+            :param alpha: Learning rate
+            :type epochs: int
+            :param epochs: Number of epochs
+            :type activate_type: str
+            :param activate_type: Name of activate function(realized in activate_functions.py,
+                                                            init. in functions.initialization.py)
+            :type loss_type: str
+            :param loss_type: Name of loss function(realized in loss_functions.py,
+                                                    init. in functions.initialization.py)
+            :type batch_size: int
+            :param batch_size: Number of train obj. in each batch
+            :type softmax_output: bool
+            :param softmax_output: Use softmax output layer or not
+            :type bias: bool
+            :param bias: Use biases in activation sums
+            :type verbosity: bool
+            :param verbosity: Write train time and time each epoch
+    """
 
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
                  loss_type='multiclassEntropy', batch_size=None, softmax_output=True,
                  bias=True, verbosity=True):
-        """
-        Create model.
-        :type layers: list
-        :param layers: List with neurons on each layer, last number should be numbers of classes
-        :type alpha: float
-        :param alpha: Learning rate
-        :type epochs: int
-        :param epochs: Number of epochs
-        :type activate_type: str
-        :param activate_type: Name of activate function(realized in activate_functions.py,
-                                                        init. in functions.initialization.py)
-        :type loss_type: str
-        :param loss_type: Name of loss function(realized in loss_functions.py,
-                                                init. in functions.initialization.py)
-        :type batch_size: int
-        :param batch_size: Number of train obj. in each batch
-        :type softmax_output: bool
-        :param softmax_output: Use softmax output layer or not
-        :type bias: bool
-        :param bias: Use biases in activation sums
-        :type verbosity: bool
-        :param verbosity: Write train time and time each epoch
-        """
-
         self.__with_softmax_output = softmax_output
         self.__verbosity = verbosity
         self.__alpha = alpha
