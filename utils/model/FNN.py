@@ -8,6 +8,29 @@ class FNN:
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
                  loss_type='multiclassEntropy', batch_size=None, softmax_output=True,
                  bias=True, verbosity=True):
+        """
+        Create model.
+        :type layers: list
+        :param layers: List with neurons on each layer
+        :type alpha: float
+        :param alpha: Learning rate
+        :type epochs: int
+        :param epochs: Number of epochs
+        :type activate_type: str
+        :param activate_type: Name of activate function(realized in activate_functions.py,
+                                                        init. in functions.initialization.py)
+        :type loss_type: str
+        :param loss_type: Name of loss function(realized in loss_functions.py,
+                                                init. in functions.initialization.py)
+        :type batch_size: int
+        :param batch_size: Number of train obj. in each batch
+        :type softmax_output: bool
+        :param softmax_output: Use softmax output layer or not
+        :type bias: bool
+        :param bias: Use biases in activation sums
+        :type verbosity: bool
+        :param verbosity: Write train time and time each epoch
+        """
 
         self.__with_softmax_output = softmax_output
         self.__verbosity = verbosity
@@ -34,9 +57,16 @@ class FNN:
     # get batch size
         self.batch_size = batch_size
 
-
     # train model, X and y is horizontal vector(size is (1,))
     def fit(self, X, y):
+        """
+        Train the model.
+        :type X: numpy.array
+        :param X: Horizontal vector with train objects, have (-1,) shape
+        :type y: numpy.array
+        :param y: Horizontal vector with train labels, have (-1,) shape
+        """
+
         if self.__verbosity:
             print("Training started, ", time.strftime("%a, %d %b %Y %H:%M:%S", time.gmtime()))
 
@@ -72,6 +102,13 @@ class FNN:
 
     # return predict probabilities for X's
     def predict_proba(self, X):
+        """
+        Return list of probabilities for each class of train object(s).
+        :type X: numpy.array
+        :param X: Horizontal vector with train objects, have (-1,) shape
+        :return: list of size len(X)
+        """
+
         predicts = []
         for obj in X:
             neurons_signals = self.__feedforward(obj.reshape(1, -1))
@@ -134,7 +171,7 @@ class FNN:
         if self.__with_biases:
             sums += self.biases[-1]
 
-        #get activations on last layer(depending on hyperparam.)
+        # get activations on last layer(depending on hyperparam.)
         if self.__with_softmax_output:
             activations = self.__softmax(sums)
         else:
@@ -159,3 +196,4 @@ class FNN:
         for neurons in range(1, len(layers)):
             fan_avg = (6 / (layers[neurons - 1] + layers[neurons])) ** (0.5)
             self.weights.append(numpy.random.uniform(-fan_avg, fan_avg, (layers[neurons - 1], layers[neurons])))
+

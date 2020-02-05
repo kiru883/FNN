@@ -1,5 +1,5 @@
 import numpy
-# all functions must return horizontal vector
+# all functions must return horizontal vector(1, -1)
 
 
 # logistic
