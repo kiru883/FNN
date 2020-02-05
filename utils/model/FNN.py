@@ -11,7 +11,7 @@ class FNN:
         """
         Create model.
         :type layers: list
-        :param layers: List with neurons on each layer
+        :param layers: List with neurons on each layer, last number should be numbers of classes
         :type alpha: float
         :param alpha: Learning rate
         :type epochs: int
