@@ -196,4 +196,3 @@ class FNN:
         for neurons in range(1, len(layers)):
             fan_avg = (6 / (layers[neurons - 1] + layers[neurons])) ** (0.5)
             self.weights.append(numpy.random.uniform(-fan_avg, fan_avg, (layers[neurons - 1], layers[neurons])))
-
