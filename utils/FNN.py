@@ -5,6 +5,7 @@ from .functions.functions_initialization import activates, losses
 class FNN:
     """
             Create model.
+
             layers: list,
                 List with neurons on each layer, last number should be numbers of classes
 
@@ -31,6 +32,7 @@ class FNN:
 
             verbosity: bool,
                 Write train time and time each epoch
+
 
     """
 
