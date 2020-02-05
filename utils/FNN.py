@@ -5,15 +5,33 @@ from .functions.functions_initialization import activates, losses
 class FNN:
     """
             Create model.
-             layers: list, List with neurons on each layer, last number should be numbers of classes
-             alpha: float, Learning rate
-             epochs: int, Number of epochs
-             activate_type: str, Name of activate function(realized in activate_functions.py, init. in functions.initialization.py)
-             loss_type: str, Name of loss function(realized in loss_functions.py, init. in functions.initialization.py)
-             batch_size: int,  Number of train obj. in each batch
-             softmax_output: bool, Use softmax output layer or not
-             bias: bool, Use biases in activation sums
-             verbosity: bool, Write train time and time each epoch
+            layers: list,
+                List with neurons on each layer, last number should be numbers of classes
+
+            alpha: float,
+                Learning rate
+
+            epochs: int,
+                Number of epochs
+
+            activate_type: str,
+                Name of activate function(realized in activate_functions.py, init. in functions.initialization.py)
+
+            loss_type: str,
+                Name of loss function(realized in loss_functions.py, init. in functions.initialization.py)
+
+            batch_size: int,
+                Number of train obj. in each batch
+
+            softmax_output: bool,
+                Use softmax output layer or not
+
+            bias: bool,
+                Use biases in activation sums
+
+            verbosity: bool,
+                Write train time and time each epoch
+
     """
 
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
