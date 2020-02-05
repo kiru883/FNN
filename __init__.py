@@ -1,1 +1,1 @@
-from FNNS.utils import *
+from FNNS.utils.FNN import FNN
