@@ -1,1 +1,1 @@
-from utils.model.FNN import FNN
+from FNNS.utils.model.FNN import FNN
