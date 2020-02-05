@@ -1,6 +1,6 @@
 import numpy
 import time
-from utils.functions.functions_initialization import activates, losses
+from .functions.functions_initialization import activates, losses
 
 
 class FNN:
