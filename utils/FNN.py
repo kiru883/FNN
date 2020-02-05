@@ -2,7 +2,6 @@ import numpy
 import time
 from .functions.functions_initialization import activates, losses
 
-
 class FNN:
     """
             Create model.
