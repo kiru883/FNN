@@ -16,7 +16,8 @@ class FNN:
                 Number of epochs
 
             activate_type: str,
-                Name of activate function(realized in activate_functions.py, init. in functions.initialization.py)
+                Name of activate function(realized in activate_functions.py, init. in
+                functions.initialization.py)
 
             loss_type: str,
                 Name of loss function(realized in loss_functions.py, init. in functions.initialization.py)
