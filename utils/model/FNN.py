@@ -6,26 +6,15 @@ from utils.functions.functions_initialization import activates, losses
 class FNN:
     """
             Create model.
-            :type layers: list
-            :param layers: List with neurons on each layer, last number should be numbers of classes
-            :type alpha: float
-            :param alpha: Learning rate
-            :type epochs: int
-            :param epochs: Number of epochs
-            :type activate_type: str
-            :param activate_type: Name of activate function(realized in activate_functions.py,
-                                                            init. in functions.initialization.py)
-            :type loss_type: str
-            :param loss_type: Name of loss function(realized in loss_functions.py,
-                                                    init. in functions.initialization.py)
-            :type batch_size: int
-            :param batch_size: Number of train obj. in each batch
-            :type softmax_output: bool
-            :param softmax_output: Use softmax output layer or not
-            :type bias: bool
-            :param bias: Use biases in activation sums
-            :type verbosity: bool
-            :param verbosity: Write train time and time each epoch
+             layers: list, List with neurons on each layer, last number should be numbers of classes
+             alpha: float, Learning rate
+             epochs: int, Number of epochs
+             activate_type: str, Name of activate function(realized in activate_functions.py, init. in functions.initialization.py)
+             loss_type: str, Name of loss function(realized in loss_functions.py, init. in functions.initialization.py)
+             batch_size: int,  Number of train obj. in each batch
+             softmax_output: bool, Use softmax output layer or not
+             bias: bool, Use biases in activation sums
+             verbosity: bool, Write train time and time each epoch
     """
 
     def __init__(self, layers, alpha=0.1, epochs=10, activate_type='logistic',
