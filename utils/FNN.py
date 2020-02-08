@@ -60,7 +60,7 @@ class FNN:
 
     # get biases if hyperparam. is true
         self.__with_biases = bias
-        self.biases = [numpy.zeros((1, layers[neurons])) for neurons in range(1, len(layers))]
+        self.biases = [numpy.zeros((1, self.__neurons[neurons])) for neurons in range(1, len(self.__neurons))]
 
     # get batch size
         self.batch_size = batch_size
