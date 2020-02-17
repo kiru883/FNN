@@ -4,7 +4,7 @@ from .functions.functions_initialization import activates, losses
 
 class FNN:
     """
-            Create model.
+            Create FNN.
 
             layers: list,
                 List with neurons on each layer, last number should be numbers of classes
@@ -65,10 +65,10 @@ class FNN:
     # get batch size
         self.batch_size = batch_size
 
-    # train model, X and y is horizontal vector(size is (1,))
+    # train FNN, X and y is horizontal vector(size is (1,))
     def fit(self, X, y):
         """
-        Train the model.
+        Train the FNN.
 
         X: numpy.array,
             Horizontal vector with train objects, have (-1,) shape
