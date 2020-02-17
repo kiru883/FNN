@@ -6,7 +6,7 @@ setup(
     version="1.21",
     description='Simple Feedforward neural network for with last softmax layer for classification',
     author='kiru883',
-    packages=find_packages(include=['utils.*', 'utils', 'utils.functions', 'utils.functions.*']),
+    packages=find_packages(),
     include_package_data=True,
     install_requires=[
         'numpy',
