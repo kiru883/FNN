@@ -122,8 +122,8 @@ class FNN:
         """
 
         predicts = []
-        for obj in X:
-            neurons_signals = self.__feedforward(obj.reshape(1, -1))
+        for obj_ind in len(X):
+            neurons_signals = self.__feedforward(X[obj_ind].reshape(1, -1))
             predicts.append(neurons_signals[-1][1])
 
         return predicts
