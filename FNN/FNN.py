@@ -116,7 +116,7 @@ class FNN:
         Return list of probabilities for each class of train object(s).
 
         X: numpy.array,
-            Horizontal vector with train objects, have (-1,) shape
+            Horizontal vector with train objects, must have (1,-1) shape
 
         RETURN: list of size len(X)
         """
@@ -124,7 +124,7 @@ class FNN:
         predicts = []
         for obj_ind in range(len(X)):
             neurons_signals = self.__feedforward(X[obj_ind].reshape(1, -1))
-            predicts.append(neurons_signals[-1][1])
+            predicts.append(neurons_signals[-1][1][0])
 
         return numpy.array(predicts)
 
