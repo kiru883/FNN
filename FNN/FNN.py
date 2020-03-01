@@ -122,11 +122,11 @@ class FNN:
         """
 
         predicts = []
-        for obj_ind in len(X):
+        for obj_ind in range(len(X)):
             neurons_signals = self.__feedforward(X[obj_ind].reshape(1, -1))
             predicts.append(neurons_signals[-1][1])
 
-        return predicts
+        return numpy.array(predicts)
 
     # get avg gradient for batch
     def __get_batch_gradient(self, batch):
