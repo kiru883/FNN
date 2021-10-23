@@ -1,2 +1,4 @@
 #pycharm
 .idea
+/venv
+__pycache__/

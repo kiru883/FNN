@@ -1,6 +1,9 @@
 import numpy
 import time
-from .functions.functions_initialization import activates, losses
+
+from tqdm import tqdm
+from FNN.functions.functions_initialization import activates, losses
+
 
 class FNN:
     """
@@ -97,7 +100,7 @@ class FNN:
                                         zip(X_shuffled[ind:ind + self.batch_size],
                                y_shuffled[ind:ind + self.batch_size]))))
 
-            for batch in batches:
+            for batch in tqdm(batches, desc=f'Training {epoch} epoch', disable=not self.__verbosity):
                 gradient = self.__get_batch_gradient(batch)
 
                 # update weights and biases
